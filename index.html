@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
+<head>
+    <title>Happy Birthday!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        #letter {
+            display: none;
+        }
+        html, body {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game {
+    box-sizing: border-box;
+}
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+        }
+
+        #game {
+            
+            margin: 0 auto;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        }
+
+        #letter, #secretCode {
+            position: absolute;
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: #ffffff;
+            margin: 0 auto;
+            width: 50%;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            animation: fadeIn 1s;
+        }
+
+        h1, p {
+            color: #333;
+        }
+        #letter img {
+            width: 50%;  /* adjust as needed */
+            height: auto;
+        }
+        button {
+            background: #ff9a9e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #ff686b;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+</head>
+<body>
+    <div id="game"></div>
+
+    <div id="letter">
+        <h1>현정이의 25번째 생일을 축하합니다.</h1>
+        <p>애기 나야.. 애기의 생일 축하해. 애기 복지부 장관으로써 애기의 행복을 위해서 최선을 다할게찡.\n애기 요즘에 진짜 너무 재밌어 하루하루가. 근데 그 중에서도 현정이가 많이 고맙다?</p>
+        <p>애기가 잘 나 응원해주고 힘들 때마다 위로해줘서 너무너무 행복해. 하하</p>
+        <p>이제 1/4 지나갔다. 벌써 ㅎㅎㅎㅎ 빨리 석사 과정 잘 끝내서 현정이 호강시킬게ㅎ</p>
+        <p>나만 믿고 따라올수 있도록ㅎㅎ 이제 곧 방학이다. 우리 방학 때도 열심히 성장하면서도! 아주 재밌게 놀아보자!</p>
+        <img src="https://i.ibb.co/T1XBj0t/Kakao-Talk-Photo-2023-06-02-16-23-46.jpg" width="500" height="auto" alt="Your image description">
+        <button onclick="document.getElementById('letter').style.display = 'none'; document.getElementById('secretCode').style.display = 'block';">Next</button>
+    </div>
+
+    <div id="secretCode">
+        <h1>현정의 생일을 축하해주세요:</h1>
+        <h2>'생일축하해'라고 쳐주세요.</h2> 
+        <input type="text" id="codeInput">
+        <button onclick="checkCode()">Submit</button>
+    </div>
+
+    <script>
+    var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        physics: {
+            default: 'arcade',
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var game = new Phaser.Game(config);
+
+    var player;
+    var hearts;
+    var cursors;
+    var score = 0;
+    var scoreText;
+
+    function preload () {
+        this.load.image('player', 'https://i.ibb.co/7G1RjsW/been.jpg');
+        this.load.image('heart', 'https://media.istockphoto.com/id/1128400054/vector/heart-symbol-of-love-and-valentines-day-flat-red-icon-isolated-on-white-background-vector.jpg?s=612x612&w=0&k=20&c=COn_iSO6PaIo3SZX1vUfDia4xNQl12SjoLZ_y46I0fY=');
+        
+        this.load.image('pencil', 'https://cdn-icons-png.flaticon.com/512/5776/5776389.png');
+        this.load.image('soccer', 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Soccer_ball.svg/800px-Soccer_ball.svg.png');
+        this.load.image('money', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQltckHREVyi52F7F5j5IocI_nOnggb8Q7LDBoDKtP0qvVmrYucshjMiDp1BQxoGzwcndo&usqp=CAU')
+        this.load.image('mouse', 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MK2A3?wid=1200&hei=630&fmt=jpeg&qlt=95&.v=1628010471000')
+        this.load.image('car', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHqZG0bSW6lx7lKxWsN_5JXXZpqfdrtSHH8Jk4jl_5r0BBlicwCFhEpPlb4V3QAVg6VGQ&usqp=CAU')
+
+        this.load.image('background', 'https://marketplace.canva.com/EAE9XG0hOgk/1/0/1600w/canva-pink-red-colorful-birthday-zoom-virtual-background-32bHJ9XZg4U.jpg'); // Load your background image
+    }
+
+    function create () {
+        var bg = this.add.image(400, 300, 'background'); // Add your background image to the scene
+    bg.setDisplaySize(this.sys.game.config.width, this.sys.game.config.height);
+        player = this.physics.add.sprite(400, 300, 'player').setScale(0.2);
+        hearts = this.physics.add.group();
+
+    // Create heart sprites and scale them
+    var config = {
+    type: Phaser.AUTO,
+    scale: {
+        mode: Phaser.Scale.RESIZE,
+        parent: 'game',
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: '100%',
+        height: '100%'
+    },
+    // rest of your config...
+};
+
+    var randomX = Math.random() * this.sys.game.config.width; // Generate a random X position within the game width
+    var randomY = Math.random() * this.sys.game.config.height; // Generate a random Y position within the game height
+    var heart = this.physics.add.sprite(randomX, randomY, 'pencil').setScale(0.1);
+    hearts.add(heart);
+    var randomX = Math.random() * this.sys.game.config.width; // Generate a random X position within the game width
+    var randomY = Math.random() * this.sys.game.config.height; // Generate a random Y position within the game height
+    var heart = this.physics.add.sprite(randomX, randomY, 'soccer').setScale(0.1);
+    hearts.add(heart);
+    var randomX = Math.random() * this.sys.game.config.width; // Generate a random X position within the game width
+    var randomY = Math.random() * this.sys.game.config.height; // Generate a random Y position within the game height
+    var heart = this.physics.add.sprite(randomX, randomY, 'mouse').setScale(0.1);
+    hearts.add(heart);
+    var randomX = Math.random() * this.sys.game.config.width; // Generate a random X position within the game width
+    var randomY = Math.random() * this.sys.game.config.height; // Generate a random Y position within the game height
+    var heart = this.physics.add.sprite(randomX, randomY, 'car').setScale(0.5);
+    hearts.add(heart);
+    var randomX = Math.random() * this.sys.game.config.width; // Generate a random X position within the game width
+    var randomY = Math.random() * this.sys.game.config.height; // Generate a random Y position within the game height
+    var heart = this.physics.add.sprite(randomX, randomY, 'money').setScale(0.5);
+    hearts.add(heart);
+
+        cursors = this.input.keyboard.createCursorKeys();
+
+        scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+        this.physics.add.overlap(player, hearts, collectHeart, null, this);
+    }
+
+    function update () {
+        if (cursors.left.isDown) {
+            player.setVelocityX(-160);
+        } else if (cursors.right.isDown) {
+            player.setVelocityX(160);
+        } else {
+            player.setVelocityX(0);
+        }
+
+        if (cursors.up.isDown) {
+            player.setVelocityY(-160);
+        } else if (cursors.down.isDown) {
+            player.setVelocityY(160);
+        } else {
+            player.setVelocityY(0);
+        }
+    }
+
+    function collectHeart (player, heart) {
+        heart.disableBody(true, true);
+
+        score += 10;
+        scoreText.setText('Score: ' + score);
+
+        // All hearts are collected
+        if(score == 10) {
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('letter').style.display = 'block';
+        }
+    }
+
+    function checkCode() {
+        var code = document.getElementById('codeInput').value;
+        if (code === '생일축하해') {
+            alert("■이모티콘명 : 카이스트의 마스코트 넙죽이\n■일련번호 : IA46AA222BUPNADM3CJ\n■쿠폰 유효 기간: 2023년 8월 13일까지\n(※유효기간 내에 쿠폰 등록 및 다운로드를 받으셔야 사용이 가능합니다)\n■쿠폰 등록 후 이모티콘 사용 : 30일간\n[쿠폰 등록 방법]\n일련 번호를 복사한 후, 쿠폰 등록 페이지에 입력해주세요.\nhttps://e.kakao.com/number");
+        } else {
+            alert('Try again.');
+        }
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+body {
+    background: linear-gradient(pink, violet);
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+#container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+h1, h2 {
+    font-size: 2em;
+}
+
+#birthdayMessage {
+    font-size: 1.5em;
+}
+
+#game, #secretMessage {
+    margin-top: 50px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: white;
+    color: violet;
+    border: none;
+    border-radius: 5px;
+}
